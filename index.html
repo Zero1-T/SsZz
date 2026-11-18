@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لعبة صغيرة لسيرينة 💗</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  font-family: Tahoma, sans-serif;
+  background: linear-gradient(145deg,#ffe4ef,#f7e8ff);
+  color: #713d60;
+}
+
+.card {
+  width: min(92vw,440px);
+  padding: 26px 20px;
+  border-radius: 28px;
+  background: #ffffffd9;
+  box-shadow: 0 18px 55px #b66b9b30;
+  text-align: center;
+}
+
+h1 { font-size: 27px; }
+
+.sub { color: #9b6b89; }
+
+.meter {
+  height: 13px;
+  background: #f8d8e8;
+  border-radius: 30px;
+  overflow: hidden;
+  margin: 16px 4px;
+}
+
+#fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg,#ff8bb8,#c78cff);
+  transition: width .25s;
+}
+
+#score {
+  font-weight: bold;
+  color: #c45b91;
+}
+
+.play {
+  height: 280px;
+  position: relative;
+  border-radius: 22px;
+  background: linear-gradient(160deg,#fff2f8,#f5edff);
+  overflow: hidden;
+  border: 1px solid #f7dbea;
+}
+
+.heart {
+  position: absolute;
+  border: 0;
+  background: transparent;
+  font-size: 35px;
+  cursor: pointer;
+  animation: float 2.4s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% { transform: translateY(-12px) rotate(9deg); }
+}
+
+#message {
+  min-height: 48px;
+  margin: 14px 0 4px;
+  font-weight: bold;
+}
+
+button#start {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 25px;
+  background: #e77eac;
+  color: white;
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tiny {
+  font-size: 12px;
+  color: #b18ba6;
+  margin-top: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<main class="card">
+
+  <div style="font-size:34px">🌷💗🌷</div>
+
+  <h1>سيرينتي احبك ترا ✨</h1>
+
+  <p class="sub">
+    اجمعي 10 قلوب يا قلبي… وكل قلب معاه حضن يا حبيبتي🫶
+  </p>
+
+  <div id="score">القلوب: 0 / 10</div>
+
+  <div class="meter">
+    <div id="fill"></div>
+  </div>
+
+  <section class="play" id="play">
+    <div style="padding-top:112px;color:#c69ab6">
+      اضغطي على احبك واجمعي القلوب 💕
+    </div>
+  </section>
+
+  <p id="message">
+   خدي راحتك انا عامل كدا عشان تهدي ياقلبي 🌸
+  </p>
+
+  <button id="start">احبك💖</button>
+
+  <div class="tiny">
+    مصممة مخصوص لسيرينة… من زوجها اللي يبي يشوفها فرحانة دايما  </div>
+
+</main>
+
+<script>
+const play = document.getElementById('play');
+const scoreEl = document.getElementById('score');
+const fill = document.getElementById('fill');
+const msg = document.getElementById('message');
+const start = document.getElementById('start');
+
+let score = 0;
+let timer = null;
+let done = false;
+
+const sweet = [
+  'قلب ليكي ياقلبي 💗',
+ 'وردة لكي يا وردتي 🌸',
+  'ههممم ابتسامتك ذي تذوبتييي ✨',
+  'خدي حضن كبير وقوي مااتركك منه 🫂',
+  'اعشقك يا احلى شي في حياتي 💞'
+];
+
+function spawn() {
+  if (done) return;
+
+  const h = document.createElement('button');
+  h.className = 'heart';
+  h.type = 'button';
+
+  h.textContent = ['💗','💖','💕','💓','💘']
+    [Math.floor(Math.random()*5)];
+
+  h.style.left = (5 + Math.random()*82) + '%';
+  h.style.top = (8 + Math.random()*78) + '%';
+
+  h.onclick = () => {
+    if (done) return;
+
+    score++;
+
+    scoreEl.textContent = `القلوب: ${score} / 10`;
+    fill.style.width = (score*10) + '%';
+
+    msg.textContent = sweet[(score-1)%sweet.length];
+
+    h.remove();
+
+    if (score >= 10) {
+      win();
+    } else {
+      spawn();
+    }
+  };
+
+  play.appendChild(h);
+}
+
+function win() {
+  done = true;
+  clearInterval(timer);
+
+  play.innerHTML = `
+    <div style="padding:48px 12px;font-size:62px">
+      💐💗🫂
+    </div>
+    <strong style="font-size:22px">
+      كسبتي يا شطورتتيييي
+    </strong>
+    <div style="margin-top:10px">
+      كل شي بيكون بخير يا عمري انا معاكي دايما 🤍
+    </div>
+  `;
+
+  msg.textContent =
+    'مهما صار بتظلي زوجتي اللي مااقدر اعيش بدونها انتي دنتيتي كلها وقلتلك من قبل مافي احد بيخرب علاقتنا مهما كان مين واي شي نقدر نحله مع بعض عشان حبنا مامجرد كلمة احبك حبنا اقوى من كذا...اموت فيكي يا احلى زوجة فالعالم 💕';
+
+  start.textContent = 'تلعبي تاني؟';
+}
+
+start.onclick = () => {
+  clearInterval(timer);
+
+  score = 0;
+  done = false;
+
+  scoreEl.textContent = 'القلوب: 0 / 10';
+  fill.style.width = '0%';
+
+  msg.textContent = 'اصطادي القلوب يا مستقبلي 💗';
+
+  play.innerHTML = '';
+
+  spawn();
+
+  timer = setInterval(() => {
+    if (!done && play.children.length < 5) {
+      spawn();
+    }
+  }, 900);
+};
+</script>
+
+</body>
+</html>
